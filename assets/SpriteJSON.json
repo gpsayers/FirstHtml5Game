@@ -1,0 +1,30 @@
+{"frames": {
+
+"Magier_0.png":
+{
+	"frame": {"x":2,"y":2,"w":89,"h":99},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":89,"h":99},
+	"sourceSize": {"w":89,"h":99},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"orc_1.png":
+{
+	"frame": {"x":93,"y":2,"w":64,"h":64},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
+	"sourceSize": {"w":64,"h":64},
+	"pivot": {"x":0.5,"y":0.5}
+}},
+"meta": {
+	"app": "http://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "SpriteSheet.png",
+	"format": "RGBA8888",
+	"size": {"w":159,"h":103},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:c54d783ed023dd29dccc84fe1a976775:37a3d5d133712105d505c40580863081:bc293cc256d1f6304248b03e341048f5$"
+}
+}
