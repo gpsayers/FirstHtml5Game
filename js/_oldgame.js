@@ -59,6 +59,7 @@ BasicGame.Battle.prototype = {
 
         wiz.anchor.setTo(0.5,0.5);
 
+
         var style = { font: "65px Arial", fill: "#ff0000", align: "center" };
 
         var text = game.add.text(game.world.centerX, game.world.centerY + 100, "BATTLE!", style);

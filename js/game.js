@@ -1,6 +1,24 @@
 var gameMain = function () {};
 
-var text;
+var gameVariables = {
+    player: {
+        hitpoints: 100,
+        experience: 0,
+        gold: 0,
+        positionX: 400,
+        positionY: 400,
+
+    },
+
+};
+
+var hudText = {
+    health: {},
+    experience: {},
+    gold: {}
+}
+
+var battleEnemies = [];
 
 gameMain.prototype = {
 
@@ -10,6 +28,7 @@ gameMain.prototype = {
         game.load.tilemap('level', 'assets/tilemap.json', null, Phaser.Tilemap.TILED_JSON);
 
         game.load.image('gameTiles', 'assets/grass-tiles-2-small.png');
+
 
     },
 
@@ -23,7 +42,7 @@ gameMain.prototype = {
 
         backgroundlayer.resizeWorld();
 
-        wiz = game.add.sprite(400, 400, 'rpg', 'Magier_0.png');
+        wiz = game.add.sprite(gameVariables.player.positionX, gameVariables.player.positionY, 'rpg', 'Magier_0.png');
 
         wiz.anchor.setTo(0.5, 0.5);
 
@@ -39,6 +58,8 @@ gameMain.prototype = {
 
         this.initializeHud();
 
+        game.state.add('battleMain', battleMain);
+
     },
 
     update: function () {
@@ -49,7 +70,11 @@ gameMain.prototype = {
     },
 
     collideDoStuff: function () {
-        gameVariables.player.hitpoints--;
+
+        game.state.start('battleMain');
+
+        this.getEnemies(1);
+
     },
 
 
@@ -110,6 +135,15 @@ gameMain.prototype = {
 
         }
 
+        gameVariables.player.positionX = wiz.x;
+        gameVariables.player.positionY = wiz.y;
+
+    },
+
+    getEnemies: function (battleId) {
+        battleEnemies = new Array();
+
+        battleEnemies.push('orc_1.png');
     },
 
 };

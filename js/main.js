@@ -6,20 +6,6 @@ var gameProperties = {
     screenHeight: 470
 };
 
-var gameVariables = {
-    player: {
-        hitpoints: 100,
-        experience: 0,
-        gold: 0
-
-    },
-
-};
-
-var hudText = {
-    health: "",
-    experience: ""
-}
 
 var mainState = function (game) {};
 
@@ -27,10 +13,12 @@ mainState.prototype = {
     preload: function () {
         game.load.script('mainMenu', 'js/mainMenu.js');
         game.load.script('mainGame', 'js/game.js');
+        game.load.script('battleMain', 'js/battle.js');
     },
     create: function () {
         game.state.add('mainMenu', mainMenu);
         game.state.add('gameMain', gameMain);
+        game.state.add('battleMain', battleMain);
         game.state.start('mainMenu');
     },
     update: function () {
@@ -43,3 +31,5 @@ var game = new Phaser.Game(gameProperties.screenWidth, gameProperties.screenHeig
 game.state.add('main', mainState);
 
 game.state.start('main');
+
+
