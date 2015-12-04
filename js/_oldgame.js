@@ -117,7 +117,7 @@ function create() {
 
     this.game.camera.follow(this.wiz);
 
-    game.input.keyboard.addCallbacks(null,null, onKeyUp)
+    //game.input.keyboard.addCallbacks(null,null, onKeyUp)
 
     game.physics.startSystem(Phaser.Physics.ARCADE);
 
