@@ -8,7 +8,7 @@ mainMenu.prototype = {
     },
 
     init: function () {
-        this.titleText = game.add.text(game.world.centerX, 50, "Game Title", {
+        this.titleText = game.add.text(game.world.centerX, 50, "Awesome RPG", {
             font: 'bold 60pt TheMinion',
             fill: '#FDFFB5',
             align: 'center'
@@ -25,7 +25,7 @@ mainMenu.prototype = {
         });
 
         this.addMenuOption('Credits', function () {
-            game.state.start("Credits");
+            game.state.start("credits");
 
         });
     },

@@ -62,20 +62,7 @@ gameMain.prototype = {
 
         game.physics.startSystem(Phaser.Physics.ARCADE);
 
-
         this.initMobs();
-
-        //        orc = game.add.sprite(50, 50, 'rpg', 'orc_1.png');
-        //
-        //        orc.anchor.setTo(0.5, 0.5);
-        //
-        //        orc2 = game.add.sprite(200, 200, 'rpg', 'orc_1.png');
-        //
-        //        orc2.anchor.setTo(0.5, 0.5);
-
-        //group.add(orc);
-
-        //group.add(orc2);
 
         wiz = game.add.sprite(gameVariables.player.positionX, gameVariables.player.positionY, 'rpg', 'Magier_0.png');
 
@@ -83,7 +70,6 @@ gameMain.prototype = {
 
         game.camera.follow(wiz);
 
-        //game.physics.enable([wiz,group], Phaser.Physics.ARCADE);
         //game.physics.enable([wiz, orc], Phaser.Physics.ARCADE);
 
         game.physics.enable(wiz, Phaser.Physics.ARCADE);
@@ -98,55 +84,40 @@ gameMain.prototype = {
     update: function () {
         this.moveWizard();
         this.updateHud();
-        //game.physics.arcade.overlap(wiz, group, this.collideDoStuff, null, this);
+
         //game.physics.arcade.overlap(wiz, orc, this.collideDoStuff, null, this);
+
         Mobs.Mob.forEach(function (item) {
             if (checkOverlap(wiz, item.SpriteObj)) {
+
                 collide(item.ID);
             }
 
-            //game.physics.arcade.overlap(wiz, item.SpriteObj, this.collideDoStuff, null, this);
         });
 
     },
 
     initMobs: function (group) {
 
-        Mobs = game.cache.getJSON('mobs');
-
-        Mobs.Mob.forEach(function (item) {
-
-            //if (item.Visible) {
-            //orc = game.add.sprite(item.StartingX, item.StartingY, item.Spritesheet, item.FileName);
-            item.SpriteObj = game.add.sprite(item.StartingX, item.StartingY, item.Spritesheet, item.FileName);
-
-            //orc.anchor.setTo(0.5, 0.5);
-            item.SpriteObj.anchor.setTo(0.5, 0.5);
-
-            //group.add(orc);
-            //group.add(item.SpriteObj);
-
-            //item.SpriteObj = orc;
-            //game.physics.enable([wiz, item.SpriteObj], Phaser.Physics.ARCADE);
-
-            //}
-
-        });
-
         //orc = game.add.sprite(50, 50, 'rpg', 'orc_1.png');
 
         //orc.anchor.setTo(0.5, 0.5);
 
+        Mobs = game.cache.getJSON('mobs');
+
+        Mobs.Mob.forEach(function (item) {
+
+            if (item.Visible) {
+
+            item.SpriteObj = game.add.sprite(item.StartingX, item.StartingY, item.Spritesheet, item.FileName);
+
+            item.SpriteObj.anchor.setTo(0.5, 0.5);
+
+            }
+
+        });
+
     },
-
-    collideDoStuff: function () {
-
-        game.state.start('battleMain');
-
-        this.getEnemies(1);
-
-    },
-
 
     initializeHud: function () {
         hudText.health = game.add.text(gameProperties.screenWidth - 200, 20, "Health: " + gameVariables.player.hitpoints);
@@ -221,7 +192,6 @@ gameMain.prototype = {
 };
 
 function collide(id) {
-
 
     battleEnemies = new Array();
 

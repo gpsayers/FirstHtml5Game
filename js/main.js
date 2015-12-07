@@ -14,11 +14,13 @@ mainState.prototype = {
         game.load.script('mainMenu', 'js/mainMenu.js');
         game.load.script('mainGame', 'js/game.js');
         game.load.script('battleMain', 'js/battle.js');
+        game.load.script('credits', 'js/Scenes/credits.js');
     },
     create: function () {
         game.state.add('mainMenu', mainMenu);
         game.state.add('gameMain', gameMain);
         game.state.add('battleMain', battleMain);
+        game.state.add('credits', credits);
         game.state.start('mainMenu');
     },
     update: function () {
