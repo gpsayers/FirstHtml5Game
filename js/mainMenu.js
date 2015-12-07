@@ -28,6 +28,10 @@ mainMenu.prototype = {
             game.state.start("credits");
 
         });
+
+        this.addMenuOption('Start Over', function () {
+            this.newGame();
+        });
     },
 
     addMenuOption: function (text, callback) {
@@ -67,6 +71,11 @@ mainMenu.prototype = {
 
 
     },
+
+    newGame: function () {
+        console.log('gv reset');
+        localStorage.removeItem('gameVariables');
+    }
 
 };
 

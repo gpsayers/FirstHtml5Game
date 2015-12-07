@@ -102,13 +102,21 @@ battleMain.prototype = {
 };
 
 function attack() {
+
     baddie.HP = baddie.HP - 20;
-    console.log(baddie.HP);
+    gameVariables.player.hitpoints--;
+
+    UpdateMob(baddie.ID, baddie);
+
+    saveGame();
 };
 
 function run() {
 
     gameVariables.player.positionY = gameVariables.player.positionY + 40;
+
+    saveGame();
+
     game.state.start('gameMain');
 };
 

@@ -16,7 +16,8 @@
       "Evasion": "10",
       "Defeated": "false",
       "Spritesheet": "rpg",
-      "SpriteObj": {}
+      "SpriteObj": "orc1",
+      "Collide": "true"
     },
     {
       "ID": "2",
@@ -34,7 +35,8 @@
       "Evasion": "10",
       "Defeated": "false",
       "Spritesheet": "rpg",
-      "SpriteObj": {}
+      "SpriteObj": "orc2",
+      "Collide": "true"
     }
   ]
 }

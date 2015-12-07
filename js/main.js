@@ -15,6 +15,7 @@ mainState.prototype = {
         game.load.script('mainGame', 'js/game.js');
         game.load.script('battleMain', 'js/battle.js');
         game.load.script('credits', 'js/Scenes/credits.js');
+        game.load.script('helper', 'js/helper.js');
     },
     create: function () {
         game.state.add('mainMenu', mainMenu);

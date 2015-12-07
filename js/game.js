@@ -10,6 +10,8 @@ var gameVariables = {
 
     },
 
+    Mobs: "",
+
 };
 
 var enemy = {
@@ -48,9 +50,13 @@ gameMain.prototype = {
         game.load.image('gameTiles', 'assets/grass-tiles-2-small.png');
 
         game.load.json('mobs', 'assets/json/mobs.json');
+
+
     },
 
     create: function () {
+
+        loadSavedFiles();
 
         map = game.add.tilemap('level');
 
@@ -86,8 +92,7 @@ gameMain.prototype = {
         this.updateHud();
 
         //game.physics.arcade.overlap(wiz, orc, this.collideDoStuff, null, this);
-
-        Mobs.Mob.forEach(function (item) {
+        gameVariables.Mobs.Mob.forEach(function (item) {
             if (checkOverlap(wiz, item.SpriteObj)) {
 
                 collide(item.ID);
@@ -103,15 +108,13 @@ gameMain.prototype = {
 
         //orc.anchor.setTo(0.5, 0.5);
 
-        Mobs = game.cache.getJSON('mobs');
-
-        Mobs.Mob.forEach(function (item) {
+        gameVariables.Mobs.Mob.forEach(function (item) {
 
             if (item.Visible) {
 
-            item.SpriteObj = game.add.sprite(item.StartingX, item.StartingY, item.Spritesheet, item.FileName);
+                item.SpriteObj = game.add.sprite(item.StartingX, item.StartingY, item.Spritesheet, item.FileName);
 
-            item.SpriteObj.anchor.setTo(0.5, 0.5);
+                item.SpriteObj.anchor.setTo(0.5, 0.5);
 
             }
 
@@ -197,7 +200,7 @@ function collide(id) {
 
     battleEnemies.push('orc_1.png');
 
-    game.state.start('battleMain', true, false, Mobs.Mob[0]);
+    game.state.start('battleMain', true, false, gameVariables.Mobs.Mob[0]);
 }
 
 function movePlayer(direction) {
@@ -237,4 +240,23 @@ function checkOverlap(spriteA, spriteB) {
     var boundsB = spriteB.getBounds();
 
     return Phaser.Rectangle.intersects(boundsA, boundsB);
+}
+
+function loadSavedFiles() {
+    var gameVar = localStorage.getItem('gameVariables');
+
+    console.log(JSON.parse(gameVar));
+
+    if (gameVar !== null) {
+        gameVariables = JSON.parse(gameVar);
+    } else {
+        gameVariables.Mobs = game.cache.getJSON('mobs');
+    }
+}
+
+function saveGame() {
+    console.log(gameVariables);
+    var gameVarStorage = gameVariables;
+
+    localStorage.setItem('gameVariables', JSON.stringify(JSON.decycle(gameVarStorage)));
 }
