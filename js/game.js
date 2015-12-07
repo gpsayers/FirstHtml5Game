@@ -12,13 +12,31 @@ var gameVariables = {
 
 };
 
+var enemy = {
+    ID: 1,
+    Name: "",
+    HP: "",
+    Exp: "",
+    Speed: "",
+    Level: 1,
+    StartingX: 10,
+    StartingY: 10,
+    Visible: true
+};
+
+var Mobs;
+
 var hudText = {
     health: {},
     experience: {},
     gold: {}
-}
+};
+
+var wiz;
 
 var battleEnemies = [];
+
+var group;
 
 gameMain.prototype = {
 
@@ -29,7 +47,7 @@ gameMain.prototype = {
 
         game.load.image('gameTiles', 'assets/grass-tiles-2-small.png');
 
-
+        game.load.json('mobs', 'assets/json/mobs.json');
     },
 
     create: function () {
@@ -42,19 +60,34 @@ gameMain.prototype = {
 
         backgroundlayer.resizeWorld();
 
+        game.physics.startSystem(Phaser.Physics.ARCADE);
+
+
+        this.initMobs();
+
+        //        orc = game.add.sprite(50, 50, 'rpg', 'orc_1.png');
+        //
+        //        orc.anchor.setTo(0.5, 0.5);
+        //
+        //        orc2 = game.add.sprite(200, 200, 'rpg', 'orc_1.png');
+        //
+        //        orc2.anchor.setTo(0.5, 0.5);
+
+        //group.add(orc);
+
+        //group.add(orc2);
+
         wiz = game.add.sprite(gameVariables.player.positionX, gameVariables.player.positionY, 'rpg', 'Magier_0.png');
 
         wiz.anchor.setTo(0.5, 0.5);
 
-        orc = game.add.sprite(50, 50, 'rpg', 'orc_1.png');
-
-        orc.anchor.setTo(0.5, 0.5);
-
         game.camera.follow(wiz);
 
-        game.physics.startSystem(Phaser.Physics.ARCADE);
+        //game.physics.enable([wiz,group], Phaser.Physics.ARCADE);
+        //game.physics.enable([wiz, orc], Phaser.Physics.ARCADE);
 
-        game.physics.enable([wiz, orc], Phaser.Physics.ARCADE);
+        game.physics.enable(wiz, Phaser.Physics.ARCADE);
+
 
         this.initializeHud();
 
@@ -63,9 +96,46 @@ gameMain.prototype = {
     },
 
     update: function () {
-        this.moveWizard(MouseEvent);
+        this.moveWizard();
         this.updateHud();
-        game.physics.arcade.overlap(wiz, orc, this.collideDoStuff, null, this);
+        //game.physics.arcade.overlap(wiz, group, this.collideDoStuff, null, this);
+        //game.physics.arcade.overlap(wiz, orc, this.collideDoStuff, null, this);
+        Mobs.Mob.forEach(function (item) {
+            if (checkOverlap(wiz, item.SpriteObj)) {
+                collide(item.ID);
+            }
+
+            //game.physics.arcade.overlap(wiz, item.SpriteObj, this.collideDoStuff, null, this);
+        });
+
+    },
+
+    initMobs: function (group) {
+
+        Mobs = game.cache.getJSON('mobs');
+
+        Mobs.Mob.forEach(function (item) {
+
+            //if (item.Visible) {
+            //orc = game.add.sprite(item.StartingX, item.StartingY, item.Spritesheet, item.FileName);
+            item.SpriteObj = game.add.sprite(item.StartingX, item.StartingY, item.Spritesheet, item.FileName);
+
+            //orc.anchor.setTo(0.5, 0.5);
+            item.SpriteObj.anchor.setTo(0.5, 0.5);
+
+            //group.add(orc);
+            //group.add(item.SpriteObj);
+
+            //item.SpriteObj = orc;
+            //game.physics.enable([wiz, item.SpriteObj], Phaser.Physics.ARCADE);
+
+            //}
+
+        });
+
+        //orc = game.add.sprite(50, 50, 'rpg', 'orc_1.png');
+
+        //orc.anchor.setTo(0.5, 0.5);
 
     },
 
@@ -88,7 +158,7 @@ gameMain.prototype = {
         hudText.health.setText("Health: " + gameVariables.player.hitpoints);
     },
 
-    moveWizard: function (dat) {
+    moveWizard: function () {
 
         if (game.input.activePointer.isUp) {
             _isDown = false;
@@ -100,39 +170,41 @@ gameMain.prototype = {
                 var newX = this.game.input.worldX;
                 var newY = this.game.input.worldY;
 
-                //console.log(" wizx:" + wiz.x + " " + "wizy:" + wiz.y + "  newX:" + newX + " " + "newY:" + newY);
-
                 if (newX > wiz.x) {
                     if (newX - wiz.x > Math.abs(newY - wiz.y)) {
                         //Move RIGHT
-                        moveRight();
+                        movePlayer('right');
+                        //moveRight();
                     } else {
                         if (newY > wiz.y) {
                             //Move DOWN
-                            moveDown();
+                            movePlayer('down');
+                            //moveDown();
 
                         } else {
                             //Move UP
-                            moveUp();
+                            movePlayer('up');
+                            // moveUp();
                         }
                     }
-
                 } else {
                     if (wiz.x - newX > Math.abs(newY - wiz.y)) {
                         //MOVE LEFT
-                        moveLeft();
+                        movePlayer('left');
+                        // moveLeft();
                     } else {
                         if (newY > wiz.y) {
                             //MOVE DOWN
-                            moveDown();
+                            movePlayer('down');
+                            //moveDown();
                         } else {
                             //MOVE UP
-                            moveUp()
+                            movePlayer('up');
+                            //moveUp()
                         }
                     }
                 }
             }
-
         }
 
         gameVariables.player.positionX = wiz.x;
@@ -148,30 +220,51 @@ gameMain.prototype = {
 
 };
 
-function moveDown() {
-    tween = game.add.tween(wiz).to({
-        x: wiz.x,
-        y: wiz.y + wiz.height
-    }, 500, Phaser.Easing.Linear.None, true);
+function collide(id) {
+
+
+    battleEnemies = new Array();
+
+    battleEnemies.push('orc_1.png');
+
+    game.state.start('battleMain', true, false, Mobs.Mob[0]);
 }
 
-function moveRight() {
-    tween = game.add.tween(wiz).to({
-        x: wiz.x + wiz.width,
-        y: wiz.y
-    }, 500, Phaser.Easing.Linear.None, true);
+function movePlayer(direction) {
+
+    switch (direction) {
+    case 'down':
+        tween = game.add.tween(wiz).to({
+            x: wiz.x,
+            y: wiz.y + wiz.height
+        }, 500, Phaser.Easing.Linear.None, true);
+        break;
+    case 'up':
+        tween = game.add.tween(wiz).to({
+            x: wiz.x,
+            y: wiz.y - wiz.height
+        }, 500, Phaser.Easing.Linear.None, true);
+        break;
+    case 'left':
+        tween = game.add.tween(wiz).to({
+            x: wiz.x - wiz.width,
+            y: wiz.y
+        }, 500, Phaser.Easing.Linear.None, true);
+        break;
+    case 'right':
+        tween = game.add.tween(wiz).to({
+            x: wiz.x + wiz.width,
+            y: wiz.y
+        }, 500, Phaser.Easing.Linear.None, true);
+        break;
+    default:
+    }
+
 }
 
-function moveLeft() {
-    tween = game.add.tween(wiz).to({
-        x: wiz.x - wiz.width,
-        y: wiz.y
-    }, 500, Phaser.Easing.Linear.None, true);
-}
+function checkOverlap(spriteA, spriteB) {
+    var boundsA = spriteA.getBounds();
+    var boundsB = spriteB.getBounds();
 
-function moveUp() {
-    tween = game.add.tween(wiz).to({
-        x: wiz.x,
-        y: wiz.y - wiz.height
-    }, 500, Phaser.Easing.Linear.None, true);
+    return Phaser.Rectangle.intersects(boundsA, boundsB);
 }

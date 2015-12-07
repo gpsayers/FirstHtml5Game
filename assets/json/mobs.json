@@ -1,0 +1,40 @@
+{
+  "Mob": [
+    {
+      "ID": "1",
+      "Name": "Orc",
+      "FileName": "orc_1.png",
+      "HP": "100",
+      "Exp": "1",
+      "Level": "1",
+      "Speed": "1",
+      "StartingX": "50",
+      "StartingY": "50",
+      "Visible": "true",
+      "Attack": "10",
+      "Defense": "10",
+      "Evasion": "10",
+      "Defeated": "false",
+      "Spritesheet": "rpg",
+      "SpriteObj": {}
+    },
+    {
+      "ID": "2",
+      "Name": "Orc",
+      "FileName": "orc_1.png",
+      "HP": "100",
+      "Exp": "1",
+      "Level": "1",
+      "Speed": "1",
+      "StartingX": "200",
+      "StartingY": "200",
+      "Visible": "true",
+      "Attack": "10",
+      "Defense": "10",
+      "Evasion": "10",
+      "Defeated": "false",
+      "Spritesheet": "rpg",
+      "SpriteObj": {}
+    }
+  ]
+}
