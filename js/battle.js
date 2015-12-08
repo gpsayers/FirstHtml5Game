@@ -1,5 +1,10 @@
 var battleMain = function () {};
 
+var battleVariables = {
+    playerTurn: true,
+    mobTurn: false,
+
+};
 
 var optionCount;
 var baddie;
@@ -7,24 +12,25 @@ var baddie;
 var battleTxt = {
     playerHp: {},
     mobHp: {},
+    currentAction: {},
 };
 
 var battleMenuOptions = {
     startX: 10,
     startY: 300,
     optionGap: 30,
-    fontSize: 15,
+    fontSize: 20,
     menuOptions: [{
             choice: "Attack",
             call: attack
         },
         {
             choice: "Spell",
-            call: test
+            call: spell
         },
         {
             choice: "Item",
-            call: test
+            call: item
         },
         {
             choice: "Run",
@@ -58,12 +64,46 @@ battleMain.prototype = {
     update: function () {
         this.updateBattleScene();
 
+        this.checkForDeath();
+
+        if (battleVariables.playerTurn == false && battleVariables.mobTurn == true) {
+            getMobAction();
+        }
+
+
+
     },
 
     updateBattleScene: function () {
         battleTxt.playerHp.setText("HP " + gameVariables.player.hitpoints);
         battleTxt.mobHp.setText("HP " + baddie.HP);
 
+    },
+
+    checkForDeath: function () {
+        if (gameVariables.player.hitpoints < 1) {
+            battleTxt.currentAction.setText("You lose!");
+
+            baddie.HP = baddie.MaxHP;
+
+            gameVariables.player.hitpoints = 100;
+
+            game.time.events.add(Phaser.Timer.SECOND * 2, run, this);
+        }
+
+        if (baddie.HP < 1) {
+            baddie.Defeated = 'true';
+
+            battleTxt.currentAction.setText("You win!");
+
+            UpdateMob(baddie.ID, baddie);
+
+            saveGame();
+
+            game.time.events.add(Phaser.Timer.SECOND * 2, function () {
+                game.state.start('gameMain');
+            }, this);
+        }
     },
 
     initBattleScene: function () {
@@ -77,15 +117,19 @@ battleMain.prototype = {
 
         var enemy = game.add.sprite(400, 100, baddie.Spritesheet, baddie.FileName);
 
-//        battleEnemies.forEach(function (item) {
-//            var enemy = game.add.sprite(400, 100, 'rpg', item);
-//        });
+        //        battleEnemies.forEach(function (item) {
+        //            var enemy = game.add.sprite(400, 100, 'rpg', item);
+        //        });
 
         var wiz = game.add.sprite(100, 100, 'rpg', 'Magier_0.png');
 
-        battleTxt.playerHp = game.add.text(100, 300, "HP " + gameVariables.player.hitpoints, optionStyle);
+        battleTxt.playerHp = game.add.text(100, 200, "HP " + gameVariables.player.hitpoints, optionStyle);
 
-        battleTxt.mobHp = game.add.text(400, 300, "HP " + baddie.HP, optionStyle);
+        battleTxt.mobHp = game.add.text(400, 200, "HP " + baddie.HP, optionStyle);
+
+        battleTxt.currentAction = game.add.text(game.camera.width / 2, 50, "", optionStyle);
+
+        battleTxt.currentAction.anchor.x = 0.5;
     },
 
     initBattleMenu: function () {
@@ -106,26 +150,82 @@ battleMain.prototype = {
 
 function attack() {
 
-    baddie.HP = baddie.HP - 20;
-    gameVariables.player.hitpoints--;
+    if (battleVariables.playerTurn == true) {
 
-    UpdateMob(baddie.ID, baddie);
+        battleVariables.playerTurn = false;
+
+        var dmg = game.rnd.integerInRange(5, 15) + 5;
+
+        battleTxt.currentAction.setText("You attack the " + baddie.Name + " for " + dmg + " damage!");
+
+
+        baddie.HP = baddie.HP - dmg;
+
+        UpdateMob(baddie.ID, baddie);
+
+        saveGame();
+
+        battleVariables.mobTurn = true;
+
+    }
+
+
+};
+
+function getMobAction() {
+
+    battleVariables.mobTurn = false;
+
+    //Mob only attacks for now
+    game.time.events.add(Phaser.Timer.SECOND * 2, mobAttack, this);
+
+
+
+};
+
+function mobAttack() {
+
+    var dmg = game.rnd.integerInRange(0, parseInt(baddie.stats.str)) + parseInt(baddie.stats.str);
+
+    battleTxt.currentAction.setText("The " + baddie.Name + " attacks you for " + dmg + ".");
+
+
+    gameVariables.player.hitpoints = gameVariables.player.hitpoints - dmg;
 
     saveGame();
+
+    battleVariables.playerTurn = true;
+
+
 };
+
 
 function run() {
 
-    gameVariables.player.positionY = gameVariables.player.positionY + 40;
+    if (battleVariables.playerTurn) {
 
-    saveGame();
+        baddie.Collide = 'false';
 
-    game.state.start('gameMain');
+        UpdateMob(baddie.ID, baddie);
+
+        saveGame();
+
+        game.state.start('gameMain');
+    }
+
+
 };
 
-function test() {
-    console.log('test clicked');
+function spell() {
+
+    battleTxt.currentAction.setText("You don't have spells.");
 };
+
+function item() {
+
+    battleTxt.currentAction.setText("You don't have items.");
+};
+
 
 function createGrid() {
 

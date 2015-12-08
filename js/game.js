@@ -71,9 +71,19 @@ gameMain.prototype = {
 
         //game.physics.arcade.overlap(wiz, orc, this.collideDoStuff, null, this);
         gameVariables.Mobs.Mob.forEach(function (item) {
-            if (checkOverlap(gameVariables.player.SpriteObj, item.SpriteObj)) {
 
-                collide(gameVariables.Mobs.Mob.indexOf(item));
+            if (item.Collide == 'true' && item.Visible == 'true' && item.Defeated == 'false') {
+
+                if (checkOverlap(gameVariables.player.SpriteObj, item.SpriteObj)) {
+
+                    collide(gameVariables.Mobs.Mob.indexOf(item));
+                }
+            }
+
+
+            if (checkOverlap(gameVariables.player.SpriteObj, item.SpriteObj) == false && item.Collide == 'false') {
+                var index = gameVariables.Mobs.Mob.indexOf(item);
+                gameVariables.Mobs.Mob[index].Collide = 'true';
             }
 
         });
@@ -110,11 +120,15 @@ gameMain.prototype = {
 
         gameVariables.Mobs.Mob.forEach(function (item) {
 
-            if (item.Visible) {
+            item.SpriteObj = game.add.sprite(item.StartingX, item.StartingY, item.Spritesheet, item.FileName);
 
-                item.SpriteObj = game.add.sprite(item.StartingX, item.StartingY, item.Spritesheet, item.FileName);
+            item.SpriteObj.anchor.setTo(0.5, 0.5);
 
-                item.SpriteObj.anchor.setTo(0.5, 0.5);
+
+            if (item.Visible == 'false' || item.Defeated == 'true') {
+
+                item.SpriteObj.enable = false;
+                item.SpriteObj.visible = false;
 
             }
 
@@ -191,9 +205,8 @@ function collide(id) {
 }
 
 function movePlayerDir(direction) {
+
     gameVariables.gamePlay.playerMoving = true;
-    console.log(gameVariables.player.positionX);
-    console.log(gameVariables.player.positionY);
 
     var tween;
 

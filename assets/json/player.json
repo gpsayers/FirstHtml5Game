@@ -1,5 +1,6 @@
 {
   "hitpoints": "100",
+  "maxhitpoints": "100",
   "experience": "0",
   "gold": "0",
   "positionX": "400",
@@ -7,14 +8,15 @@
   "level": "1",
   "class": "wizard",
   "name": "Frederick",
-  "stats": {},
-  "str": "5",
-  "dex": "5",
-  "con": "5",
-  "int": "5",
-  "wis": "5",
-  "cha": "5",
-  "def": "5",
+  "stats": {
+    "str": "5",
+    "dex": "5",
+    "con": "5",
+    "int": "5",
+    "wis": "5",
+    "cha": "5",
+    "def": "5"
+  },
   "quests": {
     "open": {},
     "completed": {}
