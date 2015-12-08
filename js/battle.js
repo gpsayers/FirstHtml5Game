@@ -44,6 +44,7 @@ battleMain.prototype = {
     },
 
     create: function () {
+
         optionCount = 1;
 
         this.initBattleScene();
@@ -74,9 +75,11 @@ battleMain.prototype = {
             strokeThickness: 4
         };
 
-        battleEnemies.forEach(function (item) {
-            var enemy = game.add.sprite(400, 100, 'rpg', item);
-        });
+        var enemy = game.add.sprite(400, 100, baddie.Spritesheet, baddie.FileName);
+
+//        battleEnemies.forEach(function (item) {
+//            var enemy = game.add.sprite(400, 100, 'rpg', item);
+//        });
 
         var wiz = game.add.sprite(100, 100, 'rpg', 'Magier_0.png');
 

@@ -1,0 +1,45 @@
+{
+  "hitpoints": "100",
+  "experience": "0",
+  "gold": "0",
+  "positionX": "400",
+  "positionY": "400",
+  "level": "1",
+  "class": "wizard",
+  "name": "Frederick",
+  "stats": {},
+  "str": "5",
+  "dex": "5",
+  "con": "5",
+  "int": "5",
+  "wis": "5",
+  "cha": "5",
+  "def": "5",
+  "quests": {
+    "open": {},
+    "completed": {}
+  },
+  "inventory": {},
+  "spells": {
+    "level1": {},
+    "level2": {},
+    "level3": {},
+    "level4": {},
+    "level5": {}
+  },
+  "equipment": {
+    "head": {},
+    "necklace": {},
+    "body": {},
+    "ring1": {},
+    "ring2": {},
+    "pants": {},
+    "boots": {},
+    "gloves": {},
+    "weapon1": {},
+    "weapon2": {}
+  },
+  "FileName": "Magier_0.png",
+  "Spritesheet": "rpg",
+  "SpriteObj": {}
+}

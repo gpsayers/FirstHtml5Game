@@ -1,29 +1,15 @@
 var gameMain = function () {};
 
 var gameVariables = {
-    player: {
-        hitpoints: 100,
-        experience: 0,
-        gold: 0,
-        positionX: 400,
-        positionY: 400,
-
+    gamePlay: {
+        playerMovement: 100,
+        tweenSpeed: 500,
+        playerMoving: false,
     },
+    player: {},
 
-    Mobs: "",
+    Mobs: {},
 
-};
-
-var enemy = {
-    ID: 1,
-    Name: "",
-    HP: "",
-    Exp: "",
-    Speed: "",
-    Level: 1,
-    StartingX: 10,
-    StartingY: 10,
-    Visible: true
 };
 
 var Mobs;
@@ -34,11 +20,9 @@ var hudText = {
     gold: {}
 };
 
-var wiz;
-
 var battleEnemies = [];
 
-var group;
+var playerMoveCount = 0;
 
 gameMain.prototype = {
 
@@ -50,6 +34,8 @@ gameMain.prototype = {
         game.load.image('gameTiles', 'assets/grass-tiles-2-small.png');
 
         game.load.json('mobs', 'assets/json/mobs.json');
+
+        game.load.json('player', 'assets/json/player.json');
 
 
     },
@@ -66,39 +52,53 @@ gameMain.prototype = {
 
         backgroundlayer.resizeWorld();
 
-        game.physics.startSystem(Phaser.Physics.ARCADE);
+        //game.physics.startSystem(Phaser.Physics.ARCADE);
 
         this.initMobs();
 
-        wiz = game.add.sprite(gameVariables.player.positionX, gameVariables.player.positionY, 'rpg', 'Magier_0.png');
-
-        wiz.anchor.setTo(0.5, 0.5);
-
-        game.camera.follow(wiz);
-
-        //game.physics.enable([wiz, orc], Phaser.Physics.ARCADE);
-
-        game.physics.enable(wiz, Phaser.Physics.ARCADE);
-
+        this.initPlayer();
 
         this.initializeHud();
-
-        game.state.add('battleMain', battleMain);
 
     },
 
     update: function () {
-        this.moveWizard();
+
+
+        this.movePlayer();
+
         this.updateHud();
 
         //game.physics.arcade.overlap(wiz, orc, this.collideDoStuff, null, this);
         gameVariables.Mobs.Mob.forEach(function (item) {
-            if (checkOverlap(wiz, item.SpriteObj)) {
+            if (checkOverlap(gameVariables.player.SpriteObj, item.SpriteObj)) {
 
-                collide(item.ID);
+                collide(gameVariables.Mobs.Mob.indexOf(item));
             }
 
         });
+
+    },
+
+    initPlayer: function () {
+
+
+        gameVariables.player.SpriteObj = game.add.sprite(gameVariables.player.positionX, gameVariables.player.positionY, gameVariables.player.Spritesheet, gameVariables.player.FileName);
+
+        gameVariables.player.SpriteObj.anchor.setTo(0.5, 0.5);
+
+        game.camera.follow(gameVariables.player.SpriteObj);
+
+        //wiz = gameVariables.player.SpriteObj;
+        //                  wiz = game.add.sprite(gameVariables.player.positionX, gameVariables.player.positionY, 'rpg', 'Magier_0.png');
+        //
+        //        wiz.anchor.setTo(0.5, 0.5);
+        //
+        //        game.camera.follow(wiz);
+        //
+        //        //game.physics.enable([wiz, orc], Phaser.Physics.ARCADE);
+        //
+        //game.physics.enable(gameVariables.player.SpriteObj, Phaser.Physics.ARCADE);
 
     },
 
@@ -132,106 +132,95 @@ gameMain.prototype = {
         hudText.health.setText("Health: " + gameVariables.player.hitpoints);
     },
 
-    moveWizard: function () {
+    movePlayer: function () {
 
         if (game.input.activePointer.isUp) {
-            _isDown = false;
+            playerMoveCount = 0;
         }
 
         if (game.input.activePointer.isDown) {
-            if (!_isDown) {
-                _isDown = true;
+
+            playerMoveCount++;
+
+            if (playerMoveCount < 2 && gameVariables.gamePlay.playerMoving == false) {
+
                 var newX = this.game.input.worldX;
                 var newY = this.game.input.worldY;
 
-                if (newX > wiz.x) {
-                    if (newX - wiz.x > Math.abs(newY - wiz.y)) {
+                if (newX > gameVariables.player.positionX) {
+                    if (newX - gameVariables.player.positionX > Math.abs(newY - gameVariables.player.positionY)) {
                         //Move RIGHT
-                        movePlayer('right');
-                        //moveRight();
+                        movePlayerDir('right');
                     } else {
-                        if (newY > wiz.y) {
+                        if (newY > gameVariables.player.positionY) {
                             //Move DOWN
-                            movePlayer('down');
-                            //moveDown();
+                            movePlayerDir('down');
 
                         } else {
                             //Move UP
-                            movePlayer('up');
-                            // moveUp();
+                            movePlayerDir('up');
                         }
                     }
                 } else {
-                    if (wiz.x - newX > Math.abs(newY - wiz.y)) {
+                    if (gameVariables.player.positionX - newX > Math.abs(newY - gameVariables.player.positionY)) {
                         //MOVE LEFT
-                        movePlayer('left');
-                        // moveLeft();
+                        movePlayerDir('left');
                     } else {
-                        if (newY > wiz.y) {
+                        if (newY > gameVariables.player.positionY) {
                             //MOVE DOWN
-                            movePlayer('down');
-                            //moveDown();
+                            movePlayerDir('down');
                         } else {
                             //MOVE UP
-                            movePlayer('up');
-                            //moveUp()
+                            movePlayerDir('up');
                         }
                     }
                 }
+
             }
+
         }
 
-        gameVariables.player.positionX = wiz.x;
-        gameVariables.player.positionY = wiz.y;
-
     },
 
-    getEnemies: function (battleId) {
-        battleEnemies = new Array();
-
-        battleEnemies.push('orc_1.png');
-    },
 
 };
 
 function collide(id) {
 
-    battleEnemies = new Array();
-
-    battleEnemies.push('orc_1.png');
-
-    game.state.start('battleMain', true, false, gameVariables.Mobs.Mob[0]);
+    game.state.start('battleMain', true, false, gameVariables.Mobs.Mob[id]);
 }
 
-function movePlayer(direction) {
+function movePlayerDir(direction) {
+    gameVariables.gamePlay.playerMoving = true;
+    console.log(gameVariables.player.positionX);
+    console.log(gameVariables.player.positionY);
 
-    switch (direction) {
-    case 'down':
-        tween = game.add.tween(wiz).to({
-            x: wiz.x,
-            y: wiz.y + wiz.height
-        }, 500, Phaser.Easing.Linear.None, true);
-        break;
-    case 'up':
-        tween = game.add.tween(wiz).to({
-            x: wiz.x,
-            y: wiz.y - wiz.height
-        }, 500, Phaser.Easing.Linear.None, true);
-        break;
-    case 'left':
-        tween = game.add.tween(wiz).to({
-            x: wiz.x - wiz.width,
-            y: wiz.y
-        }, 500, Phaser.Easing.Linear.None, true);
-        break;
-    case 'right':
-        tween = game.add.tween(wiz).to({
-            x: wiz.x + wiz.width,
-            y: wiz.y
-        }, 500, Phaser.Easing.Linear.None, true);
-        break;
-    default:
+    var tween;
+
+    if (direction == 'up') {
+        tween = game.add.tween(gameVariables.player.SpriteObj).to({
+            y: gameVariables.player.SpriteObj.y - gameVariables.gamePlay.playerMovement
+        }, gameVariables.gamePlay.tweenSpeed, Phaser.Easing.Linear.None, true);
+    } else if (direction == 'left') {
+        tween = game.add.tween(gameVariables.player.SpriteObj).to({
+            x: gameVariables.player.SpriteObj.x - gameVariables.gamePlay.playerMovement
+        }, gameVariables.gamePlay.tweenSpeed, Phaser.Easing.Linear.None, true);
+    } else if (direction == 'right') {
+        tween = game.add.tween(gameVariables.player.SpriteObj).to({
+            x: gameVariables.player.SpriteObj.x + gameVariables.gamePlay.playerMovement
+        }, gameVariables.gamePlay.tweenSpeed, Phaser.Easing.Linear.None, true);
+    } else if (direction == 'down') {
+        tween = game.add.tween(gameVariables.player.SpriteObj).to({
+            y: gameVariables.player.SpriteObj.y + gameVariables.gamePlay.playerMovement
+        }, gameVariables.gamePlay.tweenSpeed, Phaser.Easing.Linear.None, true);
+    } else {
+        console.log('Player move unknown direction');
     }
+
+    gameVariables.player.positionX = gameVariables.player.SpriteObj.x;
+    gameVariables.player.positionY = gameVariables.player.SpriteObj.y;
+
+    gameVariables.gamePlay.playerMoving = false;
 
 }
 
@@ -240,23 +229,4 @@ function checkOverlap(spriteA, spriteB) {
     var boundsB = spriteB.getBounds();
 
     return Phaser.Rectangle.intersects(boundsA, boundsB);
-}
-
-function loadSavedFiles() {
-    var gameVar = localStorage.getItem('gameVariables');
-
-    console.log(JSON.parse(gameVar));
-
-    if (gameVar !== null) {
-        gameVariables = JSON.parse(gameVar);
-    } else {
-        gameVariables.Mobs = game.cache.getJSON('mobs');
-    }
-}
-
-function saveGame() {
-    console.log(gameVariables);
-    var gameVarStorage = gameVariables;
-
-    localStorage.setItem('gameVariables', JSON.stringify(JSON.decycle(gameVarStorage)));
 }

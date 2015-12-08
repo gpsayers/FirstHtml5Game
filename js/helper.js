@@ -3,16 +3,34 @@ function UpdateMob(id, updateArrayItem) {
     var index;
 
     gameVariables.Mobs.Mob.forEach(function (item) {
-        if (item.ID === id) {
+        if (item.ID == id) {
 
             index = gameVariables.Mobs.Mob.indexOf(item);
         }
 
-        gameVariables.Mobs.Mob[index].HP = updateArrayItem.HP;
+
     });
+
+    gameVariables.Mobs.Mob[index].HP = updateArrayItem.HP;
 }
 
+function loadSavedFiles() {
+    var gameVar = localStorage.getItem('gameVariables');
 
+    if (gameVar !== null) {
+        gameVariables = JSON.parse(gameVar);
+    } else {
+        gameVariables.Mobs = game.cache.getJSON('mobs');
+        gameVariables.player = game.cache.getJSON('player');
+    }
+
+}
+
+function saveGame() {
+    var gameVarStorage = gameVariables;
+
+    localStorage.setItem('gameVariables', JSON.stringify(JSON.decycle(gameVarStorage)));
+}
 
 if (typeof JSON.decycle !== 'function') {
     JSON.decycle = function decycle(object) {
