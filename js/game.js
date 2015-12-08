@@ -17,7 +17,11 @@ var Mobs;
 var hudText = {
     health: {},
     experience: {},
-    gold: {}
+    gold: {},
+    optionIcon: {},
+    healthIcon: {},
+    goldIcon: {},
+    spellsIcon: {}
 };
 
 var battleEnemies = [];
@@ -81,7 +85,7 @@ gameMain.prototype = {
             }
 
 
-            if (checkOverlap(gameVariables.player.SpriteObj, item.SpriteObj) == false && item.Collide == 'false') {
+            if (!checkOverlap(gameVariables.player.SpriteObj, item.SpriteObj) && item.Collide == 'false') {
                 var index = gameVariables.Mobs.Mob.indexOf(item);
                 gameVariables.Mobs.Mob[index].Collide = 'true';
             }
@@ -98,6 +102,9 @@ gameMain.prototype = {
         gameVariables.player.SpriteObj.anchor.setTo(0.5, 0.5);
 
         game.camera.follow(gameVariables.player.SpriteObj);
+
+        gameVariables.player.SpriteObj.width = 75;
+        gameVariables.player.SpriteObj.height = 75;
 
         //wiz = gameVariables.player.SpriteObj;
         //                  wiz = game.add.sprite(gameVariables.player.positionX, gameVariables.player.positionY, 'rpg', 'Magier_0.png');
@@ -124,6 +131,8 @@ gameMain.prototype = {
 
             item.SpriteObj.anchor.setTo(0.5, 0.5);
 
+            item.SpriteObj.width = 75;
+            item.SpriteObj.height = 75;
 
             if (item.Visible == 'false' || item.Defeated == 'true') {
 
@@ -137,9 +146,29 @@ gameMain.prototype = {
     },
 
     initializeHud: function () {
-        hudText.health = game.add.text(gameProperties.screenWidth - 200, 20, "Health: " + gameVariables.player.hitpoints);
+
+
+        hudText.health = game.add.text(gameProperties.screenWidth - 150, 10, "Health: " + gameVariables.player.hitpoints);
 
         hudText.health.fixedToCamera = true;
+
+
+        hudText.optionIcon = game.add.sprite(25, gameProperties.screenHeight - 25, 'rpg', 'tools.png');
+
+        hudText.optionIcon.anchor.setTo(0.5, 0.5);
+
+        hudText.optionIcon.fixedToCamera = true;
+
+        hudText.optionIcon.inputEnabled = true;
+
+        hudText.optionIcon.events.onInputDown.add(function () {game.state.start('mainMenu');}, this);
+
+        hudText.goldIcon = game.add.sprite( gameProperties.screenWidth - 250, 20, 'rpg', 'coin.png');
+
+        hudText.goldIcon.anchor.setTo(0.5, 0.5);
+
+        hudText.goldIcon.fixedToCamera = true;
+
     },
 
     updateHud: function () {

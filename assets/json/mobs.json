@@ -44,7 +44,7 @@
       },
       "StartingX": "200",
       "StartingY": "200",
-      "Visible": "true",
+      "Visible": "false",
       "stats": {
         "str": "8",
         "dex": "8",
@@ -58,6 +58,36 @@
       "Defeated": "false",
       "Spritesheet": "rpg",
       "SpriteObj": "orc2",
+      "Collide": "true"
+    },
+    {
+      "ID": "3",
+      "Name": "Skeleton",
+      "FileName": "rpgcritters2_skeleton.png",
+      "HP": "50",
+      "MaxHP": "50",
+      "Exp": "10",
+      "Level": "1",
+      "Loot": {
+        "gold": "10",
+        "items": {}
+      },
+      "StartingX": "400",
+      "StartingY": "400",
+      "Visible": "true",
+      "stats": {
+        "str": "2",
+        "dex": "8",
+        "con": "8",
+        "int": "8",
+        "wis": "8",
+        "cha": "8",
+        "def": "8"
+      },
+      "Weakness": {},
+      "Defeated": "false",
+      "Spritesheet": "rpg",
+      "SpriteObj": "",
       "Collide": "true"
     }
   ]

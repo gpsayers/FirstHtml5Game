@@ -187,7 +187,7 @@ function mobAttack() {
 
     var dmg = game.rnd.integerInRange(0, parseInt(baddie.stats.str)) + parseInt(baddie.stats.str);
 
-    battleTxt.currentAction.setText("The " + baddie.Name + " attacks you for " + dmg + ".");
+    battleTxt.currentAction.setText("The " + baddie.Name + " attacks you for " + dmg + " damage.");
 
 
     gameVariables.player.hitpoints = gameVariables.player.hitpoints - dmg;

@@ -19,7 +19,14 @@ mainMenu.prototype = {
     },
 
     create: function () {
+
         this.addMenuOption('Start', function () {
+            this.newGame();
+
+            game.state.start("gameMain");
+        });
+
+        this.addMenuOption('Continue', function () {
             game.state.start("gameMain");
 
         });
@@ -29,9 +36,11 @@ mainMenu.prototype = {
 
         });
 
-        this.addMenuOption('Start Over', function () {
-            this.newGame();
+        this.addMenuOption('Save', function () {
+           saveGame();
         });
+
+
     },
 
     addMenuOption: function (text, callback) {
