@@ -70,13 +70,43 @@
       "Level": "1",
       "Loot": {
         "gold": "10",
-        "items": {}
+        "items": { }
       },
       "StartingX": "400",
       "StartingY": "400",
       "Visible": "true",
       "stats": {
         "str": "2",
+        "dex": "8",
+        "con": "8",
+        "int": "8",
+        "wis": "8",
+        "cha": "8",
+        "def": "8"
+      },
+      "Weakness": { },
+      "Defeated": "false",
+      "Spritesheet": "rpg",
+      "SpriteObj": "",
+      "Collide": "true"
+    },
+        {
+      "ID": "4",
+      "Name": "Spider",
+      "FileName": "rpgcritters2_spider.png",
+      "HP": "75",
+      "MaxHP": "75",
+      "Exp": "10",
+      "Level": "1",
+      "Loot": {
+        "gold": "10",
+        "items": {}
+      },
+      "StartingX": "600",
+      "StartingY": "100",
+      "Visible": "true",
+      "stats": {
+        "str": "4",
         "dex": "8",
         "con": "8",
         "int": "8",

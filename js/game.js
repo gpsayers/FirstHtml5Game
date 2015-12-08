@@ -147,32 +147,36 @@ gameMain.prototype = {
 
     initializeHud: function () {
 
+        //Health Icon
+        hudText.healthIcon = game.add.sprite(gameProperties.screenWidth - 65, 20, 'rpg', 'heart.png');
+        hudText.healthIcon.anchor.setTo(0.5, 0.5);
+        hudText.healthIcon.fixedToCamera = true;
 
-        hudText.health = game.add.text(gameProperties.screenWidth - 150, 10, "Health: " + gameVariables.player.hitpoints);
-
+        //Health Text
+        hudText.health = game.add.text(gameProperties.screenWidth - 50, 8, gameVariables.player.hitpoints);
         hudText.health.fixedToCamera = true;
 
-
+        //Option Icon
         hudText.optionIcon = game.add.sprite(25, gameProperties.screenHeight - 25, 'rpg', 'tools.png');
-
         hudText.optionIcon.anchor.setTo(0.5, 0.5);
-
         hudText.optionIcon.fixedToCamera = true;
-
         hudText.optionIcon.inputEnabled = true;
+        hudText.optionIcon.events.onInputDown.add(function () { saveGame(); game.state.start('mainMenu');}, this);
 
-        hudText.optionIcon.events.onInputDown.add(function () {game.state.start('mainMenu');}, this);
-
-        hudText.goldIcon = game.add.sprite( gameProperties.screenWidth - 250, 20, 'rpg', 'coin.png');
-
+        //Gold Icon
+        hudText.goldIcon = game.add.sprite( gameProperties.screenWidth - 130, 20, 'rpg', 'coin.png');
         hudText.goldIcon.anchor.setTo(0.5, 0.5);
-
         hudText.goldIcon.fixedToCamera = true;
+
+        //Gold Text
+        hudText.gold = game.add.text(gameProperties.screenWidth - 110, 8, gameVariables.player.gold);
+        hudText.gold.fixedToCamera = true;
 
     },
 
     updateHud: function () {
-        hudText.health.setText("Health: " + gameVariables.player.hitpoints);
+        hudText.health.setText(gameVariables.player.hitpoints);
+        hudText.gold.setText(gameVariables.player.gold);
     },
 
     movePlayer: function () {
@@ -187,8 +191,8 @@ gameMain.prototype = {
 
             if (playerMoveCount < 2 && gameVariables.gamePlay.playerMoving == false) {
 
-                var newX = this.game.input.worldX;
-                var newY = this.game.input.worldY;
+                var newX = game.input.worldX;
+                var newY = game.input.worldY;
 
                 if (newX > gameVariables.player.positionX) {
                     if (newX - gameVariables.player.positionX > Math.abs(newY - gameVariables.player.positionY)) {
@@ -225,6 +229,9 @@ gameMain.prototype = {
 
     },
 
+    newMove: function () {
+
+    },
 
 };
 
