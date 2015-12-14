@@ -53,31 +53,46 @@ gameMain.prototype = {
 
         this.initializeHud();
 
-        console.log(gameVariables.Mobs);
 
     },
 
     update: function () {
 
-        var collisionFound = false;
+        if (this.delayTimer < game.time.now) {
+            gameVariables.gamePlay.playerCollide = true;
+
+        }
+
+        if (gameVariables.gamePlay.playerCollide == false) {
+            if (game.time.now % 8 > 1 ) {
+                playerSprite.tint = 0xFFFFFF;
+            } else {
+                playerSprite.tint = 0xff0000;
+            }
+        }
+                else {
+            playerSprite.tint = 0xFFFFFF
+        }
+
+
 
         this.movePlayer();
 
         this.updateHud();
 
-        //game.physics.arcade.overlap(wiz, orc, this.collideDoStuff, null, this);
+
         Mobs.forEach(function (item) {
 
             if (checkOverlap(playerSprite, item)) {
 
-                collisionFound = true;
+                //collisionFound = true;
 
                 gameVariables.Mobs.Mob.forEach(function (gvItem) {
 
                     if (Mobs.indexOf(item) == gvItem.SpriteObj) {
 
                         //Check if mob is set to collide
-                        if (gvItem.Collide == 'true' && gameVariables.gamePlay.playerMoving == false) {
+                        if (gameVariables.gamePlay.playerCollide && gameVariables.gamePlay.playerMoving == false) {
 
                             collide(gvItem);
 
@@ -90,15 +105,6 @@ gameMain.prototype = {
 
 
         });
-
-        if (collisionFound == false && gameVariables.gamePlay.playerMoving == false) {
-            gameVariables.Mobs.Mob.forEach(function (item) {
-
-                item.Collide = 'true';
-            });
-        }
-
-
 
 
     },
@@ -115,6 +121,9 @@ gameMain.prototype = {
 
         playerSprite.width = 75;
         playerSprite.height = 75;
+
+        this.delayTimer = game.time.now + 2000;
+
 
     },
 
@@ -282,12 +291,6 @@ function movePlayerDir(direction) {
         saveGame();
 
     }, this);
-
-
-
-
-
-    //gameVariables.gamePlay.playerMoving = false;
 
 
 

@@ -14,13 +14,17 @@ var battleTxt = {
     mobHp: {},
     currentAction: {},
     playerName: {},
-    enemyName: {}
+    enemyName: {},
+    playerMana: {},
+    mobMana: {},
+    optionIcon: {}
+
 };
 
 var battleMenuOptions = {
-    startX: 10,
-    startY: 300,
-    optionGap: 30,
+    startX: 100,
+    startY: 425,
+    optionGap: 100,
     fontSize: 20,
     menuOptions: [{
             choice: "Attack",
@@ -52,20 +56,20 @@ battleMain.prototype = {
 
         gameVariables.battleVariables = battleVariables;
 
-        optionCount = 1;
+        optionCount = 0;
 
         this.initBattleScene();
 
         this.initBattleMenu();
 
-        createGrid();
+        //createGrid();
 
     },
 
     update: function () {
         this.updateBattleScene();
 
-        this.checkForDeath();
+        checkForDeath();
 
         if (battleVariables.playerTurn == false && battleVariables.mobTurn == true) {
             getMobAction();
@@ -81,33 +85,6 @@ battleMain.prototype = {
 
     },
 
-    checkForDeath: function () {
-        if (gameVariables.player.hitpoints < 1) {
-            battleTxt.currentAction.setText("You lose!");
-
-            battleMobs[0].HP = battleMobs[0].MaxHP;
-
-            gameVariables.player.hitpoints = gameVariables.player.maxhitpoints;
-
-            game.time.events.add(Phaser.Timer.SECOND * 2, run, this);
-        }
-
-        if (battleMobs[0].HP < 1) {
-            battleMobs[0].Defeated = 'true';
-
-            battleTxt.currentAction.setText("You win!");
-
-
-
-            //UpdateMob(baddie.ID, baddie);
-
-            saveGame();
-
-            game.time.events.add(Phaser.Timer.SECOND * 2, function () {
-                game.state.start('gameMain');
-            }, this);
-        }
-    },
 
     initBattleScene: function () {
         var optionStyle = {
@@ -124,11 +101,6 @@ battleMain.prototype = {
         enemy.width = 75;
 
 
-
-        //        battleEnemies.forEach(function (item) {
-        //            var enemy = game.add.sprite(400, 100, 'rpg', item);
-        //        });
-
         var player = game.add.sprite(75, 75, 'rpg', 'Magier_0.png');
 
         player.height = 75;
@@ -142,22 +114,32 @@ battleMain.prototype = {
 
         battleTxt.mobHp = game.add.text(475, 150, "HP " + battleMobs[0].HP, optionStyle);
 
-        battleTxt.currentAction = game.add.text(game.camera.width / 2, 50, "", optionStyle);
+        battleTxt.currentAction = game.add.text(game.camera.width / 2, 200, "", optionStyle);
 
         battleTxt.currentAction.anchor.x = 0.5;
     },
 
     initBattleMenu: function () {
 
-        var topMenu = new Phaser.Line(0, 300, 100, 300);
+        var topMenu = new Phaser.Line(0, 400, game.camera.width, 400);
         game.debug.geom(topMenu, '#FFFFFF');
 
-        var rMenu = new Phaser.Line(100, 300, 100, game.camera.height);
-        game.debug.geom(rMenu, '#FFFFFF');
+        //var rMenu = new Phaser.Line(100, 300, 100, game.camera.height);
+        // game.debug.geom(rMenu, '#FFFFFF');
 
         battleMenuOptions.menuOptions.forEach(function (item) {
             addMenuOpt(item.choice, item.call);
         });
+
+        //Option Icon
+        battleTxt.optionIcon = game.add.sprite(25, gameProperties.screenHeight - 25, 'rpg', 'tools.png');
+        battleTxt.optionIcon.anchor.setTo(0.5, 0.5);
+        battleTxt.optionIcon.fixedToCamera = true;
+        battleTxt.optionIcon.inputEnabled = true;
+        battleTxt.optionIcon.events.onInputDown.add(function () {
+            saveGame();
+            game.state.start('mainMenu');
+        }, this);
     },
 
 
@@ -176,13 +158,11 @@ function attack() {
 
         battleMobs[0].HP = battleMobs[0].HP - dmg;
 
-       // UpdateMob(baddie.ID, baddie);
+        saveGame();
 
-
+        checkForDeath();
 
         battleVariables.mobTurn = true;
-
-        saveGame();
 
     }
 
@@ -211,8 +191,11 @@ function mobAttack() {
 
     saveGame();
 
-    battleVariables.playerTurn = true;
 
+
+    checkForDeath();
+
+    battleVariables.playerTurn = true;
 
 };
 
@@ -221,10 +204,7 @@ function run() {
 
     if (battleVariables.playerTurn) {
 
-        battleMobs[0].Collide = 'false';
-
-        console.log(battleMobs[0]);
-        //UpdateMob(baddie.ID, baddie);
+        gameVariables.gamePlay.playerCollide = false;
 
         saveGame();
 
@@ -236,7 +216,24 @@ function run() {
 
 function spell() {
 
-    battleTxt.currentAction.setText("You don't have spells.");
+    if (battleVariables.playerTurn == true) {
+
+        battleVariables.playerTurn = false;
+
+        var dmg = game.rnd.integerInRange(25, 50) + 10;
+
+        battleTxt.currentAction.setText("You cast Fireball on the " + battleMobs[0].Name + " for " + dmg + " damage!");
+
+
+        battleMobs[0].HP = battleMobs[0].HP - dmg;
+
+        saveGame();
+
+        checkForDeath();
+
+        battleVariables.mobTurn = true;
+
+    }
 };
 
 function item() {
@@ -244,6 +241,33 @@ function item() {
     battleTxt.currentAction.setText("You don't have items.");
 };
 
+function checkForDeath() {
+    if (gameVariables.player.hitpoints < 1) {
+        battleTxt.currentAction.setText("You lose!");
+
+        battleMobs[0].HP = battleMobs[0].MaxHP;
+
+        gameVariables.player.hitpoints = gameVariables.player.maxhitpoints;
+
+        game.time.events.add(Phaser.Timer.SECOND * 2, run, this);
+    }
+
+    if (battleMobs[0].HP < 1) {
+        battleMobs[0].Defeated = 'true';
+
+        saveGame();
+
+        game.time.events.add(Phaser.Timer.SECOND * 2, function () {
+            battleTxt.currentAction.setText("You win!");
+
+            game.time.events.add(Phaser.Timer.SECOND * 2, function () {
+                game.state.start('gameMain');
+            }, this);
+        }, this);
+
+
+    }
+};
 
 function createGrid() {
 
@@ -272,7 +296,7 @@ function addMenuOpt(text, callback) {
         strokeThickness: 4
     };
 
-    var txt = game.add.text(battleMenuOptions.startX, (optionCount * battleMenuOptions.optionGap) + battleMenuOptions.startY, text, optionStyle);
+    var txt = game.add.text((optionCount * battleMenuOptions.optionGap) + battleMenuOptions.startX, battleMenuOptions.startY, text, optionStyle);
 
     txt.inputEnabled = true;
     txt.events.onInputUp.add(callback, this);

@@ -5,6 +5,7 @@ var gameVariables = {
         playerMovement: 75,
         tweenSpeed: 500,
         playerMoving: false,
+        playerCollide: true,
     },
     player: {},
 
@@ -36,7 +37,7 @@ mainMenu.prototype = {
 
     create: function () {
 
-        this.addMenuOption('Start', function () {
+        this.addMenuOption('Start New', function () {
             this.newGame();
 
             game.state.start("create");

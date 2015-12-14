@@ -1,6 +1,8 @@
 {
-  "hitpoints": "100",
-  "maxhitpoints": "100",
+  "hitpoints": 100,
+  "maxhitpoints": 100,
+  "mana": 100,
+  "maxmana": 100,
   "experience": "0",
   "gold": "0",
   "positionX": 400,
