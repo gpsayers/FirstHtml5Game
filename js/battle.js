@@ -7,12 +7,14 @@ var battleVariables = {
 };
 
 var optionCount;
-var baddie;
+
 
 var battleTxt = {
     playerHp: {},
     mobHp: {},
     currentAction: {},
+    playerName: {},
+    enemyName: {}
 };
 
 var battleMenuOptions = {
@@ -41,9 +43,6 @@ var battleMenuOptions = {
 
 
 battleMain.prototype = {
-    init: function (Mob) {
-        baddie = Mob;
-    },
 
     preload: function () {
 
@@ -51,13 +50,15 @@ battleMain.prototype = {
 
     create: function () {
 
+        gameVariables.battleVariables = battleVariables;
+
         optionCount = 1;
 
         this.initBattleScene();
 
         this.initBattleMenu();
 
-        //createGrid();
+        createGrid();
 
     },
 
@@ -76,7 +77,7 @@ battleMain.prototype = {
 
     updateBattleScene: function () {
         battleTxt.playerHp.setText("HP " + gameVariables.player.hitpoints);
-        battleTxt.mobHp.setText("HP " + baddie.HP);
+        battleTxt.mobHp.setText("HP " + battleMobs[0].HP);
 
     },
 
@@ -84,19 +85,21 @@ battleMain.prototype = {
         if (gameVariables.player.hitpoints < 1) {
             battleTxt.currentAction.setText("You lose!");
 
-            baddie.HP = baddie.MaxHP;
+            battleMobs[0].HP = battleMobs[0].MaxHP;
 
-            gameVariables.player.hitpoints = 100;
+            gameVariables.player.hitpoints = gameVariables.player.maxhitpoints;
 
             game.time.events.add(Phaser.Timer.SECOND * 2, run, this);
         }
 
-        if (baddie.HP < 1) {
-            baddie.Defeated = 'true';
+        if (battleMobs[0].HP < 1) {
+            battleMobs[0].Defeated = 'true';
 
             battleTxt.currentAction.setText("You win!");
 
-            UpdateMob(baddie.ID, baddie);
+
+
+            //UpdateMob(baddie.ID, baddie);
 
             saveGame();
 
@@ -115,17 +118,29 @@ battleMain.prototype = {
             strokeThickness: 4
         };
 
-        var enemy = game.add.sprite(400, 100, baddie.Spritesheet, baddie.FileName);
+        var enemy = game.add.sprite(475, 75, battleMobs[0].Spritesheet, battleMobs[0].FileName);
+
+        enemy.height = 75;
+        enemy.width = 75;
+
+
 
         //        battleEnemies.forEach(function (item) {
         //            var enemy = game.add.sprite(400, 100, 'rpg', item);
         //        });
 
-        var wiz = game.add.sprite(100, 100, 'rpg', 'Magier_0.png');
+        var player = game.add.sprite(75, 75, 'rpg', 'Magier_0.png');
 
-        battleTxt.playerHp = game.add.text(100, 200, "HP " + gameVariables.player.hitpoints, optionStyle);
+        player.height = 75;
+        player.height = 75;
 
-        battleTxt.mobHp = game.add.text(400, 200, "HP " + baddie.HP, optionStyle);
+        battleTxt.playerName = game.add.text(75, 25, gameVariables.player.name, optionStyle);
+
+        battleTxt.playerHp = game.add.text(75, 150, "HP " + gameVariables.player.hitpoints, optionStyle);
+
+        battleTxt.enemyName = game.add.text(475, 25, battleMobs[0].Name, optionStyle);
+
+        battleTxt.mobHp = game.add.text(475, 150, "HP " + battleMobs[0].HP, optionStyle);
 
         battleTxt.currentAction = game.add.text(game.camera.width / 2, 50, "", optionStyle);
 
@@ -156,16 +171,18 @@ function attack() {
 
         var dmg = game.rnd.integerInRange(5, 15) + 5;
 
-        battleTxt.currentAction.setText("You attack the " + baddie.Name + " for " + dmg + " damage!");
+        battleTxt.currentAction.setText("You attack the " + battleMobs[0].Name + " for " + dmg + " damage!");
 
 
-        baddie.HP = baddie.HP - dmg;
+        battleMobs[0].HP = battleMobs[0].HP - dmg;
 
-        UpdateMob(baddie.ID, baddie);
+       // UpdateMob(baddie.ID, baddie);
 
-        saveGame();
+
 
         battleVariables.mobTurn = true;
+
+        saveGame();
 
     }
 
@@ -185,9 +202,9 @@ function getMobAction() {
 
 function mobAttack() {
 
-    var dmg = game.rnd.integerInRange(0, parseInt(baddie.stats.str)) + parseInt(baddie.stats.str);
+    var dmg = game.rnd.integerInRange(0, parseInt(battleMobs[0].stats.str)) + parseInt(battleMobs[0].stats.str);
 
-    battleTxt.currentAction.setText("The " + baddie.Name + " attacks you for " + dmg + " damage.");
+    battleTxt.currentAction.setText("The " + battleMobs[0].Name + " attacks you for " + dmg + " damage.");
 
 
     gameVariables.player.hitpoints = gameVariables.player.hitpoints - dmg;
@@ -204,9 +221,10 @@ function run() {
 
     if (battleVariables.playerTurn) {
 
-        baddie.Collide = 'false';
+        battleMobs[0].Collide = 'false';
 
-        UpdateMob(baddie.ID, baddie);
+        console.log(battleMobs[0]);
+        //UpdateMob(baddie.ID, baddie);
 
         saveGame();
 

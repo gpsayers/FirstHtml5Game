@@ -4,14 +4,14 @@ function UpdateMob(id, updateArrayItem) {
 
     gameVariables.Mobs.Mob.forEach(function (item) {
         if (item.ID == id) {
-
-            index = gameVariables.Mobs.Mob.indexOf(item);
+            item = updateArrayItem;
+            //index = gameVariables.Mobs.Mob.indexOf(item);
         }
 
 
     });
 
-    gameVariables.Mobs.Mob[index].HP = updateArrayItem.HP;
+    //gameVariables.Mobs.Mob[index].HP = updateArrayItem.HP;
 }
 
 function loadSavedFiles() {

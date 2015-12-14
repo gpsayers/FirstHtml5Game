@@ -2,13 +2,15 @@ var mainMenu = function () {};
 
 var gameVariables = {
     gamePlay: {
-        playerMovement: 100,
+        playerMovement: 75,
         tweenSpeed: 500,
         playerMoving: false,
     },
     player: {},
 
     Mobs: {},
+
+    battleVariables: {},
 
 };
 
@@ -100,7 +102,6 @@ mainMenu.prototype = {
     },
 
     newGame: function () {
-        console.log('gv reset');
         localStorage.removeItem('gameVariables');
     }
 

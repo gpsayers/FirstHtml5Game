@@ -8,10 +8,6 @@ createChar.prototype = {
     },
 
     create: function () {
-//        var marker1 = game.add.sprite(0, 0);
-//        var marker2 = game.add.sprite(game.camera.width, game.camera.height);
-//        this.enableGui(game, marker1, marker2);
-
 
         div.style.visibility = 'visible';
 

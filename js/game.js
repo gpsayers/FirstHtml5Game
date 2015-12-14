@@ -1,8 +1,8 @@
 var gameMain = function () {};
 
+var playerSprite;
 
-
-var Mobs;
+var Mobs = [];
 
 var hudText = {
     health: {},
@@ -14,7 +14,7 @@ var hudText = {
     spellsIcon: {}
 };
 
-var battleEnemies = [];
+var battleMobs = [];
 
 var playerMoveCount = 0;
 
@@ -53,82 +53,94 @@ gameMain.prototype = {
 
         this.initializeHud();
 
+        console.log(gameVariables.Mobs);
+
     },
 
     update: function () {
 
+        var collisionFound = false;
 
         this.movePlayer();
 
         this.updateHud();
 
         //game.physics.arcade.overlap(wiz, orc, this.collideDoStuff, null, this);
-        gameVariables.Mobs.Mob.forEach(function (item) {
+        Mobs.forEach(function (item) {
 
-            if (item.Collide == 'true' && item.Visible == 'true' && item.Defeated == 'false') {
+            if (checkOverlap(playerSprite, item)) {
 
-                if (checkOverlap(gameVariables.player.SpriteObj, item.SpriteObj)) {
+                collisionFound = true;
 
-                    collide(gameVariables.Mobs.Mob.indexOf(item));
-                }
+                gameVariables.Mobs.Mob.forEach(function (gvItem) {
+
+                    if (Mobs.indexOf(item) == gvItem.SpriteObj) {
+
+                        //Check if mob is set to collide
+                        if (gvItem.Collide == 'true' && gameVariables.gamePlay.playerMoving == false) {
+
+                            collide(gvItem);
+
+                        }
+                    }
+
+                });
+
             }
 
-
-            if (!checkOverlap(gameVariables.player.SpriteObj, item.SpriteObj) && item.Collide == 'false') {
-                var index = gameVariables.Mobs.Mob.indexOf(item);
-                gameVariables.Mobs.Mob[index].Collide = 'true';
-            }
 
         });
+
+        if (collisionFound == false && gameVariables.gamePlay.playerMoving == false) {
+            gameVariables.Mobs.Mob.forEach(function (item) {
+
+                item.Collide = 'true';
+            });
+        }
+
+
+
 
     },
 
     initPlayer: function () {
 
 
-        gameVariables.player.SpriteObj = game.add.sprite(gameVariables.player.positionX, gameVariables.player.positionY, gameVariables.player.Spritesheet, gameVariables.player.FileName);
+        playerSprite = game.add.sprite(gameVariables.player.positionX, gameVariables.player.positionY, gameVariables.player.Spritesheet, gameVariables.player.FileName);
 
-        gameVariables.player.SpriteObj.anchor.setTo(0.5, 0.5);
 
-        game.camera.follow(gameVariables.player.SpriteObj);
+        playerSprite.anchor.setTo(0.5, 0.5);
 
-        gameVariables.player.SpriteObj.width = 75;
-        gameVariables.player.SpriteObj.height = 75;
+        game.camera.follow(playerSprite);
 
-        //wiz = gameVariables.player.SpriteObj;
-        //                  wiz = game.add.sprite(gameVariables.player.positionX, gameVariables.player.positionY, 'rpg', 'Magier_0.png');
-        //
-        //        wiz.anchor.setTo(0.5, 0.5);
-        //
-        //        game.camera.follow(wiz);
-        //
-        //        //game.physics.enable([wiz, orc], Phaser.Physics.ARCADE);
-        //
-        //game.physics.enable(gameVariables.player.SpriteObj, Phaser.Physics.ARCADE);
+        playerSprite.width = 75;
+        playerSprite.height = 75;
 
     },
 
     initMobs: function (group) {
 
-        //orc = game.add.sprite(50, 50, 'rpg', 'orc_1.png');
-
-        //orc.anchor.setTo(0.5, 0.5);
+        var i = 0;
 
         gameVariables.Mobs.Mob.forEach(function (item) {
 
-            item.SpriteObj = game.add.sprite(item.StartingX, item.StartingY, item.Spritesheet, item.FileName);
+            Mobs[i] = game.add.sprite(item.StartingX, item.StartingY, item.Spritesheet, item.FileName);
 
-            item.SpriteObj.anchor.setTo(0.5, 0.5);
+            Mobs[i].anchor.setTo(0.5, 0.5);
 
-            item.SpriteObj.width = 75;
-            item.SpriteObj.height = 75;
+            Mobs[i].width = 75;
+            Mobs[i].height = 75;
 
             if (item.Visible == 'false' || item.Defeated == 'true') {
 
-                item.SpriteObj.enable = false;
-                item.SpriteObj.visible = false;
+                Mobs[i].enable = false;
+                Mobs[i].visible = false;
 
             }
+
+            item.SpriteObj = i;
+
+            i++;
 
         });
 
@@ -186,12 +198,12 @@ gameMain.prototype = {
                 var newX = game.input.worldX;
                 var newY = game.input.worldY;
 
-                if (newX > gameVariables.player.positionX) {
-                    if (newX - gameVariables.player.positionX > Math.abs(newY - gameVariables.player.positionY)) {
+                if (newX > playerSprite.x) {
+                    if (newX - playerSprite.x > Math.abs(newY - playerSprite.y)) {
                         //Move RIGHT
                         movePlayerDir('right');
                     } else {
-                        if (newY > gameVariables.player.positionY) {
+                        if (newY > playerSprite.y) {
                             //Move DOWN
                             movePlayerDir('down');
 
@@ -201,11 +213,11 @@ gameMain.prototype = {
                         }
                     }
                 } else {
-                    if (gameVariables.player.positionX - newX > Math.abs(newY - gameVariables.player.positionY)) {
+                    if (playerSprite.x - newX > Math.abs(newY - playerSprite.y)) {
                         //MOVE LEFT
                         movePlayerDir('left');
                     } else {
-                        if (newY > gameVariables.player.positionY) {
+                        if (newY > playerSprite.y) {
                             //MOVE DOWN
                             movePlayerDir('down');
                         } else {
@@ -221,47 +233,63 @@ gameMain.prototype = {
 
     },
 
-    newMove: function () {
-
-    },
 
 };
 
-function collide(id) {
+function collide(mob) {
 
-    game.state.start('battleMain', true, false, gameVariables.Mobs.Mob[id]);
+    battleMobs = [];
+
+    battleMobs.push(mob);
+
+    game.state.start('battleMain');
 }
 
 function movePlayerDir(direction) {
 
-    gameVariables.gamePlay.playerMoving = true;
 
+    gameVariables.gamePlay.playerMoving = true;
     var tween;
 
     if (direction == 'up') {
-        tween = game.add.tween(gameVariables.player.SpriteObj).to({
-            y: gameVariables.player.SpriteObj.y - gameVariables.gamePlay.playerMovement
+        var tween = game.add.tween(playerSprite).to({
+            y: playerSprite.y - gameVariables.gamePlay.playerMovement
         }, gameVariables.gamePlay.tweenSpeed, Phaser.Easing.Linear.None, true);
     } else if (direction == 'left') {
-        tween = game.add.tween(gameVariables.player.SpriteObj).to({
-            x: gameVariables.player.SpriteObj.x - gameVariables.gamePlay.playerMovement
+        var tween = game.add.tween(playerSprite).to({
+            x: playerSprite.x - gameVariables.gamePlay.playerMovement
         }, gameVariables.gamePlay.tweenSpeed, Phaser.Easing.Linear.None, true);
     } else if (direction == 'right') {
-        tween = game.add.tween(gameVariables.player.SpriteObj).to({
-            x: gameVariables.player.SpriteObj.x + gameVariables.gamePlay.playerMovement
+        var tween = game.add.tween(playerSprite).to({
+            x: playerSprite.x + gameVariables.gamePlay.playerMovement
         }, gameVariables.gamePlay.tweenSpeed, Phaser.Easing.Linear.None, true);
     } else if (direction == 'down') {
-        tween = game.add.tween(gameVariables.player.SpriteObj).to({
-            y: gameVariables.player.SpriteObj.y + gameVariables.gamePlay.playerMovement
+        var tween = game.add.tween(playerSprite).to({
+            y: playerSprite.y + gameVariables.gamePlay.playerMovement
         }, gameVariables.gamePlay.tweenSpeed, Phaser.Easing.Linear.None, true);
     } else {
         console.log('Player move unknown direction');
     }
 
-    gameVariables.player.positionX = gameVariables.player.SpriteObj.x;
-    gameVariables.player.positionY = gameVariables.player.SpriteObj.y;
 
-    gameVariables.gamePlay.playerMoving = false;
+
+
+    tween.onComplete.add(function () {
+        gameVariables.gamePlay.playerMoving = false;
+        gameVariables.player.positionX = playerSprite.x;
+        gameVariables.player.positionY = playerSprite.y;
+
+        saveGame();
+
+    }, this);
+
+
+
+
+
+    //gameVariables.gamePlay.playerMoving = false;
+
+
 
 }
 
