@@ -1,16 +1,6 @@
 var gameMain = function () {};
 
-var gameVariables = {
-    gamePlay: {
-        playerMovement: 100,
-        tweenSpeed: 500,
-        playerMoving: false,
-    },
-    player: {},
 
-    Mobs: {},
-
-};
 
 var Mobs;
 
@@ -40,7 +30,6 @@ gameMain.prototype = {
         game.load.json('mobs', 'assets/json/mobs.json');
 
         game.load.json('player', 'assets/json/player.json');
-
 
     },
 
@@ -161,10 +150,13 @@ gameMain.prototype = {
         hudText.optionIcon.anchor.setTo(0.5, 0.5);
         hudText.optionIcon.fixedToCamera = true;
         hudText.optionIcon.inputEnabled = true;
-        hudText.optionIcon.events.onInputDown.add(function () { saveGame(); game.state.start('mainMenu');}, this);
+        hudText.optionIcon.events.onInputDown.add(function () {
+            saveGame();
+            game.state.start('mainMenu');
+        }, this);
 
         //Gold Icon
-        hudText.goldIcon = game.add.sprite( gameProperties.screenWidth - 130, 20, 'rpg', 'coin.png');
+        hudText.goldIcon = game.add.sprite(gameProperties.screenWidth - 130, 20, 'rpg', 'coin.png');
         hudText.goldIcon.anchor.setTo(0.5, 0.5);
         hudText.goldIcon.fixedToCamera = true;
 

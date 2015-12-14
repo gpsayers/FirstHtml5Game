@@ -27,7 +27,7 @@
 	"sourceSize": {"w":64,"h":64},
 	"pivot": {"x":0.5,"y":0.5}
 },
-"heart.png":
+"g21766.png":
 {
 	"frame": {"x":225,"y":2,"w":64,"h":64},
 	"rotated": false,
@@ -36,7 +36,7 @@
 	"sourceSize": {"w":64,"h":64},
 	"pivot": {"x":0.5,"y":0.5}
 },
-"orc_1.png":
+"g21776.png":
 {
 	"frame": {"x":291,"y":2,"w":64,"h":64},
 	"rotated": false,
@@ -45,7 +45,7 @@
 	"sourceSize": {"w":64,"h":64},
 	"pivot": {"x":0.5,"y":0.5}
 },
-"potionBlue.png":
+"g21786.png":
 {
 	"frame": {"x":357,"y":2,"w":64,"h":64},
 	"rotated": false,
@@ -54,7 +54,7 @@
 	"sourceSize": {"w":64,"h":64},
 	"pivot": {"x":0.5,"y":0.5}
 },
-"potionRed.png":
+"heart.png":
 {
 	"frame": {"x":423,"y":2,"w":64,"h":64},
 	"rotated": false,
@@ -63,9 +63,36 @@
 	"sourceSize": {"w":64,"h":64},
 	"pivot": {"x":0.5,"y":0.5}
 },
+"orc_1.png":
+{
+	"frame": {"x":489,"y":2,"w":64,"h":64},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
+	"sourceSize": {"w":64,"h":64},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"potionBlue.png":
+{
+	"frame": {"x":555,"y":2,"w":64,"h":64},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
+	"sourceSize": {"w":64,"h":64},
+	"pivot": {"x":0.5,"y":0.5}
+},
+"potionRed.png":
+{
+	"frame": {"x":621,"y":2,"w":64,"h":64},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
+	"sourceSize": {"w":64,"h":64},
+	"pivot": {"x":0.5,"y":0.5}
+},
 "rpgcritters2_orc.png":
 {
-	"frame": {"x":489,"y":2,"w":36,"h":35},
+	"frame": {"x":687,"y":2,"w":36,"h":35},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":36,"h":35},
@@ -74,7 +101,7 @@
 },
 "rpgcritters2_skeleton.png":
 {
-	"frame": {"x":527,"y":2,"w":30,"h":35},
+	"frame": {"x":725,"y":2,"w":30,"h":35},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":30,"h":35},
@@ -83,7 +110,7 @@
 },
 "rpgcritters2_spider.png":
 {
-	"frame": {"x":559,"y":2,"w":32,"h":27},
+	"frame": {"x":757,"y":2,"w":32,"h":27},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":32,"h":27},
@@ -92,7 +119,7 @@
 },
 "tome.png":
 {
-	"frame": {"x":593,"y":2,"w":64,"h":64},
+	"frame": {"x":791,"y":2,"w":64,"h":64},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
@@ -101,7 +128,7 @@
 },
 "tools.png":
 {
-	"frame": {"x":659,"y":2,"w":64,"h":64},
+	"frame": {"x":857,"y":2,"w":64,"h":64},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
@@ -110,7 +137,7 @@
 },
 "x.png":
 {
-	"frame": {"x":725,"y":2,"w":64,"h":64},
+	"frame": {"x":923,"y":2,"w":64,"h":64},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
@@ -122,8 +149,8 @@
 	"version": "1.0",
 	"image": "SpriteSheet.png",
 	"format": "RGBA8888",
-	"size": {"w":791,"h":103},
+	"size": {"w":989,"h":103},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:173f396d035ea046b79ac35bb881627c:20b710be2d1a6d5336f3d5a9a0793519:bc293cc256d1f6304248b03e341048f5$"
+	"smartupdate": "$TexturePacker:SmartUpdate:168f0da251fc06f2a5fb19759563ec00:1c34335cdafd24dd8b45b4d443f7b962:bc293cc256d1f6304248b03e341048f5$"
 }
 }

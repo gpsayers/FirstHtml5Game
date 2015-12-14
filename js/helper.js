@@ -19,10 +19,17 @@ function loadSavedFiles() {
 
     if (gameVar !== null) {
         gameVariables = JSON.parse(gameVar);
+
     } else {
         gameVariables.Mobs = game.cache.getJSON('mobs');
         gameVariables.player = game.cache.getJSON('player');
     }
+
+    if (playerName != null) {
+        gameVariables.player.name = playerName;
+    }
+
+
 
 }
 

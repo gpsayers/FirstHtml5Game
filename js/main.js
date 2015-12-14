@@ -7,6 +7,7 @@ var gameProperties = {
 };
 
 
+
 var mainState = function (game) {};
 
 mainState.prototype = {
@@ -16,16 +17,16 @@ mainState.prototype = {
         game.load.script('battleMain', 'js/battle.js');
         game.load.script('credits', 'js/Scenes/credits.js');
         game.load.script('helper', 'js/helper.js');
-        game.load.script('gui', 'js/rsgui.min.js');
-        game.load.script('test', 'js/Scenes/test.js');
+        game.load.script('create', 'js/Scenes/createCharacter.js');
     },
     create: function () {
         game.state.add('mainMenu', mainMenu);
         game.state.add('gameMain', gameMain);
         game.state.add('battleMain', battleMain);
         game.state.add('credits', credits);
-        game.state.add('test', test);
+        game.state.add('create', createChar);
         game.state.start('mainMenu');
+
     },
     update: function () {
 

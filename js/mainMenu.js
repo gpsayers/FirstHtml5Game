@@ -1,5 +1,19 @@
 var mainMenu = function () {};
 
+var gameVariables = {
+    gamePlay: {
+        playerMovement: 100,
+        tweenSpeed: 500,
+        playerMoving: false,
+    },
+    player: {},
+
+    Mobs: {},
+
+};
+
+var playerName;
+
 mainMenu.prototype = {
 
     menuConfig: {
@@ -23,7 +37,7 @@ mainMenu.prototype = {
         this.addMenuOption('Start', function () {
             this.newGame();
 
-            game.state.start("gameMain");
+            game.state.start("create");
         });
 
         this.addMenuOption('Continue', function () {
@@ -40,9 +54,9 @@ mainMenu.prototype = {
         //   saveGame();
         //});
 
-        this.addMenuOption('Test', function () {
-            game.state.start('test');
-        });
+//        this.addMenuOption('Test', function () {
+//            game.state.start('test');
+//        });
 
 
     },
